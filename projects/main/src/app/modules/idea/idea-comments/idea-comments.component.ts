@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-idea-comments',
+  selector: 'ideat-idea-comments',
   templateUrl: './idea-comments.component.html',
   styleUrls: ['./idea-comments.component.css']
 })

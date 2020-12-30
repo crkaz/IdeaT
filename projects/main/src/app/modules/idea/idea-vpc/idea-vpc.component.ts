@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-idea-vpc',
+  selector: 'ideat-idea-vpc',
   templateUrl: './idea-vpc.component.html',
   styleUrls: ['./idea-vpc.component.css']
 })

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-idea-tags',
+  selector: 'ideat-idea-tags',
   templateUrl: './idea-tags.component.html',
   styleUrls: ['./idea-tags.component.css']
 })

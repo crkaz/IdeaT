@@ -24,6 +24,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 const angularMaterialModules = [
   MatInputModule,
@@ -48,12 +49,15 @@ const angularMaterialModules = [
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
+  MatSidenavModule,
 ];
 //#endregion
 
+import { FooterComponent } from './components/footer/footer.component';
+
 @NgModule({
-  declarations: [],
+  declarations: [FooterComponent],
   imports: [CommonModule, BrowserAnimationsModule],
-  exports: [...angularMaterialModules],
+  exports: [...angularMaterialModules, FooterComponent],
 })
 export class UiModule {}

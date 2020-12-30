@@ -1,9 +1,12 @@
 <mat-toolbar color="primary">Idea-t</mat-toolbar>
-<mat-grid-list cols="4">
-    <mat-grid-tile colspan=1>
-        <app-ideas-panel></app-ideas-panel>
-    </mat-grid-tile>
-    <mat-grid-tile colspan=3>
-        <ideat-business-canvas-panel></ideat-business-canvas-panel>
-    </mat-grid-tile>
-</mat-grid-list>
+
+<mat-drawer-container class="example-container" autosize>
+    <mat-drawer #ideasPanel mode="side" opened>
+        <ideat-ideas-panel #ideasPanel></ideat-ideas-panel>
+    </mat-drawer>
+
+    <ideat-ideas-panel-toggle [matDrawerContainer]="ideasPanel"></ideat-ideas-panel-toggle>
+    <ideat-business-canvas-panel></ideat-business-canvas-panel>
+</mat-drawer-container>
+
+<ideat-footer></ideat-footer>

@@ -1,0 +1,9 @@
+button {
+  height: 100vh;
+}
+
+#ideas-panel-icon {
+  position: absolute;
+  top: 15px;
+  left: 31%;
+}
