@@ -1,0 +1,7 @@
+APP MODULES
+-ideas
+-comments
+-vpc
+-bc
+-hypotheses
+-tests*
