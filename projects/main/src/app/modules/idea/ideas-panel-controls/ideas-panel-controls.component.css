@@ -1,0 +1,17 @@
+#container {
+  padding: 10px 0;
+}
+
+#icon-button-text {
+  margin-left: 10px;
+  line-height: 7px;
+}
+
+#search-form {
+  display: inline-block;
+  margin-left: 40px;
+}
+
+.full-width {
+  width: 100%;
+}

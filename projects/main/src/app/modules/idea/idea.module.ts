@@ -10,6 +10,7 @@ import { IdeaDetailsComponent } from './idea-details/idea-details.component';
 import { IdeasListItemComponent } from './ideas-list-item/ideas-list-item.component';
 import { CoreModule } from '../../core/core.module';
 import { IdeasPanelToggleComponent } from './ideas-panel-toggle/ideas-panel-toggle.component';
+import { IdeasPanelControlsComponent } from './ideas-panel-controls/ideas-panel-controls.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { IdeasPanelToggleComponent } from './ideas-panel-toggle/ideas-panel-togg
     IdeaDetailsComponent,
     IdeasListItemComponent,
     IdeasPanelToggleComponent,
+    IdeasPanelControlsComponent,
   ],
   imports: [CommonModule, CoreModule],
   exports: [IdeasPanelComponent, IdeasPanelToggleComponent],
