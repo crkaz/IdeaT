@@ -1,5 +1,6 @@
 button {
   height: 100vh;
+  z-index: 2000;
 }
 
 #ideas-panel-icon {
