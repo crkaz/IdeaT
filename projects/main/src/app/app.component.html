@@ -1,6 +1,15 @@
-<mat-toolbar color="primary">Idea-t</mat-toolbar>
+<!-- Header -->
+<header>
+    <mat-toolbar color="primary">
+        <mat-icon class="material-icons-outlined">
+            wb_incandescent
+        </mat-icon>
+        <span>&nbsp;Idea-t</span>
+    </mat-toolbar>
+</header>
 
-<mat-drawer-container class="example-container" autosize>
+<!-- Content -->
+<mat-drawer-container id="content">
     <mat-drawer #ideasPanel mode="side" opened>
         <ideat-ideas-panel #ideasPanel></ideat-ideas-panel>
     </mat-drawer>
@@ -9,6 +18,9 @@
 
     <!-- stepper nav-->
     <router-outlet></router-outlet>
-</mat-drawer-container>
+</mat-drawer-container>s
 
-<ideat-footer></ideat-footer>
+<!-- Footer -->
+<footer>
+    <ideat-footer></ideat-footer>
+</footer>
