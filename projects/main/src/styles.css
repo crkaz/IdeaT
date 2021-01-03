@@ -39,6 +39,8 @@ footer {
   transform: translateY(-50%);
   width: 100%;
   text-align: center;
+  height: 100%;
+  min-width: 900px;
 }
 
 .panel-padding {
@@ -64,4 +66,12 @@ footer {
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.hide-router-outline, button {
+  outline: none !important;
+}
+
+.clickable {
+  cursor: pointer;
 }
