@@ -41,6 +41,7 @@ footer {
   text-align: center;
   height: 100%;
   min-width: 900px;
+  overflow-x: hidden;
 }
 
 .panel-padding {
@@ -74,4 +75,13 @@ footer {
 
 .clickable {
   cursor: pointer;
+}
+
+#nav-stepper {
+  position: absolute;
+  padding-left: 67px;
+  bottom: 0px;
+  width: 100%;
+  height: 70px;
+  overflow-y: hidden;
 }

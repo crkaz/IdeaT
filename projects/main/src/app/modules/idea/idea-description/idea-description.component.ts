@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IdeasService } from '../shared/services/ideas.service';
 
 @Component({
   selector: 'ideat-idea-description',
@@ -7,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IdeaDescriptionComponent implements OnInit {
 
-  constructor() { }
+  constructor(public ideas: IdeasService) {
+  }
 
   ngOnInit(): void {
   }

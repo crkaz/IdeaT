@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IdeasService } from '../shared/services/ideas.service';
 
 @Component({
   selector: 'ideat-idea-details',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./idea-details.component.css'],
 })
 export class IdeaDetailsComponent implements OnInit {
-  constructor() {}
+  constructor(public ideas: IdeasService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

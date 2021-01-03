@@ -16,8 +16,19 @@
 
     <ideat-ideas-panel-toggle [matDrawerContainer]="ideasPanel"></ideat-ideas-panel-toggle>
 
-    <!-- stepper nav-->
     <router-outlet></router-outlet>
+    <!-- @TODO: make component -->
+    <mat-horizontal-stepper id="nav-stepper" #stepper>
+        <mat-step>
+            <ng-template matStepLabel>Canvases</ng-template>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Hypotheses</ng-template>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Testing</ng-template>
+        </mat-step>
+    </mat-horizontal-stepper>
 </mat-drawer-container>
 
 <!-- Footer -->

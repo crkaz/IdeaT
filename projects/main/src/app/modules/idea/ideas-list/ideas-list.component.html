@@ -1,5 +1,6 @@
 <mat-list role="list">
-    <mat-list-item role="listitem" *ngFor="let idea of ideas">
-        <ideat-ideas-list-item [idea]="idea"></ideat-ideas-list-item>
+    <mat-list-item role="listitem" *ngFor="let idea of ideas.ideas">
+        <ideat-ideas-list-item [idea]="idea" (click)="ideas.setActiveIdea(idea)" class=clickable>
+        </ideat-ideas-list-item>
     </mat-list-item>
 </mat-list>
