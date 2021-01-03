@@ -20,8 +20,8 @@ header {
 
 #content {
   position: absolute;
-  top: 65px;
-  bottom: 34px;
+  top: 64px;
+  bottom: 32px;
   width: 100%;
 }
 
@@ -41,7 +41,11 @@ footer {
   text-align: center;
 }
 
-.center-v {
+.panel-padding {
+  padding: 15px;
+}
+
+.centre-v {
   margin: 0;
   position: absolute;
   top: 50%;
