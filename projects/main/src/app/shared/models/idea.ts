@@ -6,4 +6,5 @@ export interface Idea {
   comments: string[];
   tags: string[];
   vpc: any;
+  canvas: any[];
 }

@@ -1,0 +1,33 @@
+p {
+    font-family: Lato;
+  }
+  
+  .clip-wrap {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .clipped-suffix {
+    margin-left: -12px;
+  }
+  
+  .vote-control {
+    text-align: center;
+    position: absolute;
+    right: 0px;
+    top: 25%;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  .idea-card:hover {
+    cursor: pointer;
+    background-color: lightcyan;
+  }
+  
+  .idea-card__selected,
+  .idea-card__selected:hover {
+    background-color: lightblue;
+  }
+  

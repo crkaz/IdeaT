@@ -1,6 +1,32 @@
-<mat-list role="list">
-    <mat-list-item role="listitem" *ngFor="let idea of ideas.ideas">
-        <ideat-ideas-list-item [idea]="idea" (click)="ideas.setActiveIdea(idea)" class=clickable>
-        </ideat-ideas-list-item>
-    </mat-list-item>
+<mat-list *ngFor="let idea of ideas" (click)="selectIdea(idea)">
+    <mat-card class="idea-card" [class.idea-card__selected]="selectedIdea === idea">
+        <mat-card-title>{{idea.title}}</mat-card-title>
+        <mat-card-subtitle>
+            By {{idea.author}} on {{idea.date}}
+        </mat-card-subtitle>
+        <mat-card-content>
+            <div class=" row">
+                <div class="col-11 clip-wrap">
+                    <div class="row">
+                        <span class="col-10 clip-wrap">
+                            {{idea.description}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-2 vote-control">
+                    <button mat-icon-button (click)="vote(idea, 'up')" matTooltip="Vote this idea UP."
+                        matTooltipPosition="before">
+                        <mat-icon>arrow_drop_up</mat-icon>
+                    </button>
+                    <div matTooltip="Net votes for this idea." matTooltipPosition="before">
+                        {{idea.votes}}
+                    </div>
+                    <button mat-icon-button (click)="vote(idea, 'down')" matTooltip="Vote this idea DOWN."
+                        matTooltipPosition="before">
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
 </mat-list>

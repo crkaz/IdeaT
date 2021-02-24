@@ -7,7 +7,6 @@ import { IdeaCommentsComponent } from './idea-comments/idea-comments.component';
 import { IdeaTagsComponent } from './idea-tags/idea-tags.component';
 import { IdeaVpcComponent } from './idea-vpc/idea-vpc.component';
 import { IdeaDetailsComponent } from './idea-details/idea-details.component';
-import { IdeasListItemComponent } from './ideas-list-item/ideas-list-item.component';
 import { CoreModule } from '../../core/core.module';
 import { IdeasPanelToggleComponent } from './ideas-panel-toggle/ideas-panel-toggle.component';
 import { IdeasPanelControlsComponent } from './ideas-panel-controls/ideas-panel-controls.component';
@@ -21,7 +20,6 @@ import { IdeasPanelControlsComponent } from './ideas-panel-controls/ideas-panel-
     IdeaTagsComponent,
     IdeaVpcComponent,
     IdeaDetailsComponent,
-    IdeasListItemComponent,
     IdeasPanelToggleComponent,
     IdeasPanelControlsComponent,
   ],
