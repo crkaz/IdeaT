@@ -8,7 +8,7 @@ import { IdeasService } from '../shared/services/ideas.service';
 })
 export class IdeaDescriptionComponent implements OnInit {
 
-  constructor(public ideas: IdeasService) {
+  constructor(public ideaService: IdeasService) {
   }
 
   ngOnInit(): void {

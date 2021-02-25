@@ -6,14 +6,19 @@ import { Idea } from '../../../../shared/models/idea';
   providedIn: 'root'
 })
 export class IdeasService {
-  ideas: Idea[] = [];
-  activeIdea: Idea;
+  readonly LOREM_DESC: string[] = [
+    'Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua.',
+    'Sed non nisl porttitor, maximus libero in, aliquam leo. Pellentesque at gravida tortor, ut fermentum metus. Fusce ultricies, turpis quis posuere volutpat, nunc tellus posuere augue, at congue elit eros ac orci.',
+    'Praesent at nibh nisi. Integer lorem dui, tristique eu mollis ac, maximus id justo. Proin viverra risus vitae hendrerit consectetur. Cras ullamcorper tincidunt quam nec scelerisque.',
+    'Mauris venenatis ac elit eu semper. Aliquam vestibulum diam non urna venenatis pharetra.',
+    'Hello this is my idea :)'];
+  ideas: any[] = [];
+  activeIdea: any;
   drawnObjects: any[] = [];
+  stickies: any[] = [];
   private subject = new Subject<any>();
 
   constructor() {
-    this.testIdeas(10);
-    this.activeIdea = this.ideas[0];
   }
 
   sendMessage(message: string): void {
@@ -27,31 +32,18 @@ export class IdeasService {
   getMessage(): Observable<any> {
     return this.subject.asObservable();
   }
-  get ActiveIdea(): Idea { return this.activeIdea; }
-  setActiveIdea(idea: Idea): void {
+
+  get ActiveIdea(): any { return this.activeIdea; }
+  setActiveIdea(idea: any): void {
     this.activeIdea = idea;
-    !this.activeIdea.canvas ? this.activeIdea.canvas = [] : null;
-    this.drawnObjects = this.activeIdea.canvas;
-  }
-
-  testIdeas(n: number): void {
-    for (let i = 0; i < n; i += 1) {
-      const idea: Idea = {
-        id: i.toString(),
-        author: 'test',
-        creationDate: Date.now(),
-        description: 'Test-generated example of a an idea object #' + i.toString(),
-        comments: [],
-        tags: [],
-        vpc: null,
-        canvas: []
-      };
-
-      this.ideas.push(idea);
-    }
+    !this.activeIdea.drawnObjects ? this.activeIdea.drawnObjects = [] : null;
+    !this.activeIdea.stickies ? this.activeIdea.stickies = [] : null;
+    this.drawnObjects = this.activeIdea.drawnObjects;
+    this.stickies = this.activeIdea.stickies;
   }
 
   saveCanvas(): void {
-    this.activeIdea.canvas = this.drawnObjects;
+    this.activeIdea ? this.activeIdea.drawnObjects = this.drawnObjects : null;
+    this.activeIdea ? this.activeIdea.stickies = this.stickies : null;
   }
 }

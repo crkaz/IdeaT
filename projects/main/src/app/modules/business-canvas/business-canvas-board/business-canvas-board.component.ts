@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IdeasService } from '../../idea/shared/services/ideas.service';
 
 const BLACK = '#000000';
 const WHITE = '#FFFFFF';
+const YELLOW = '#eBD549';
 const PI = Math.PI;
 const TWO_PI = PI * 2;
 const MAX_ZOOM = 2;
@@ -25,17 +26,21 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
   lastPanX = null;
   lastPanY = null;
   drawing = false;
+  erasing = false;
   lastDrawX = null;
   lastDrawY = null;
+  lastEDrawX = null;
+  lastEDrawY = null;
   panOffsetX = 0;
   panOffsetY = 0;
   drawCoords = [];
-  panRedrawInterval = 20;
+  panRedrawInterval = 15;
   panRedrawCounter = 0;
   subscription: Subscription;
   WIDTH = 2450;
+  deleting = false;
 
-  constructor(private ideaService: IdeasService) { }
+  constructor(public ideaService: IdeasService) { }
 
 
   ngAfterViewInit(): void {
@@ -63,7 +68,7 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
     this.CANVAS.nativeElement.addEventListener('mousemove', (e) => { this.handleMouseMove(e); });
     this.CANVAS.nativeElement.addEventListener('mouseup', (e) => { this.handleMouseUp(e); });
     this.CANVAS.nativeElement.addEventListener('mouseout', (e) => { this.stopDrawing(e); });
-    // this.CANVAS.nativeElement.addEventListener('wheel', (e) => { this.handleMouseWheel(e); });
+    this.CANVAS.nativeElement.addEventListener('wheel', (e) => { this.handleMouseWheel(e); });
 
     this.CTX.lineJoin = 'round';
     this.CTX.lineCap = 'round';
@@ -80,9 +85,11 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
   handleMouseDown(e): void {
     switch (e.which) {
       case 1:
+        this.stickyCollisionDetection(e);
         this.drawing = true;
         break;
       case 2:
+        this.erasing = true;
         break;
       case 3:
         this.panning = true;
@@ -93,7 +100,12 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
   handleMouseUp(e): void {
     switch (e.which) {
       case 1:
-        this.createSticky(e);
+        if (!this.deleting) {
+          this.createSticky(e);
+        }
+        else {
+          this.deleting = false;
+        }
         break;
       case 2:
         break;
@@ -110,6 +122,7 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
         this.draw(e);
         break;
       case 2:
+        this.erase(e);
         break;
       case 3:
         this.pan(e);
@@ -139,23 +152,51 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
     const y = (e.offsetY - this.panOffsetY) * this.inverseCanvasScale();
     !this.lastDrawX ? [this.lastDrawX, this.lastDrawY] = [x, y] : this.CTX.moveTo(this.lastDrawX, this.lastDrawY);   // Ensure we start drawing from where user clicks rather than origin.
     this.drawCoords.push({ x: this.lastDrawX, y: this.lastDrawY });
-    // this.CTX.moveTo(lastDrawX, lastDrawY);
+    this.CTX.lineWidth = 2;
     this.CTX.lineTo(x, y);
     this.CTX.stroke();
     [this.lastDrawX, this.lastDrawY] = [x, y];
   }
 
+  erase(e): void {
+    if (!this.erasing) { return; }
+    this.CTX.strokeStyle = WHITE;
+    this.CTX.beginPath();
+    const x = (e.offsetX - this.panOffsetX) * this.inverseCanvasScale();
+    const y = (e.offsetY - this.panOffsetY) * this.inverseCanvasScale();
+    !this.lastEDrawX ? [this.lastEDrawX, this.lastEDrawY] = [x, y] : this.CTX.moveTo(this.lastEDrawX, this.lastEDrawY);   // Ensure we start drawing from where user clicks rather than origin.
+    this.CTX.lineWidth = 30;
+    this.CTX.lineTo(x, y);
+    this.CTX.stroke();
+    [this.lastEDrawX, this.lastEDrawY] = [x, y];
+  }
+
   createSticky(e): void {
     if (this.drawCoords.length < 2) {
-      this.CTX.fillStyle = this.getColour();
-      this.CTX.fillRect(e.offsetX - this.panOffsetX - 50, e.offsetY - this.panOffsetY, 100, 80);
+      const colour = YELLOW;
+      const x = (e.offsetX - this.panOffsetX) * this.inverseCanvasScale();
+      const y = (e.offsetY - this.panOffsetY) * this.inverseCanvasScale();
+      const width = 130;
+      const height = 110;
+      const maxCharsPerLine = 25;
+      const text = this.chunkStr(this.ideaService.LOREM_DESC[Math.floor(Math.random() * 4) + 1], maxCharsPerLine).join('\n');
+      this.CTX.fillStyle = colour;
+      this.ideaService.stickies.push({ x, y, width, height, colour, text });
+      this.CTX.fillRect(x, y, width, height);
+      this.CTX.fillStyle = BLACK;
+      this.CTX.font = '10px Arial';
+      let i = 1;
+      for (const subStr of text.split('\n')) {
+        this.CTX.fillText(subStr, x, y + (10 * i));
+        i += 1;
+      }
     }
   }
 
   pan(e): void {
     const left = this.lastPanX < e.offsetX;
     const up = this.lastPanY < e.offsetY;
-    const panRate = 5;
+    const panRate = 2;
     if (this.lastPanX) {
       left ? this.translate(-panRate, null) : this.translate(panRate, null);
       up ? this.translate(null, -panRate) : this.translate(null, panRate);
@@ -169,10 +210,12 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
 
   stopDrawing(e): void {
     this.drawing = false;
+    this.erasing = false;
     this.panning = false;
     this.lastDrawX = null;  // Ensure we start drawing from where user clicks rather than origin.
     this.lastPanX = null;
-    this.ideaService.drawnObjects.push(this.drawCoords);
+    const shouldDraw = this.drawCoords.length > 15;
+    shouldDraw ? this.ideaService.drawnObjects.push(this.drawCoords) : this.redrawObjects(true);
     this.drawCoords = [];
   }
 
@@ -200,6 +243,18 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
     return false;
   }
 
+  chunkStr(str, n): any[] {
+    const ret = [];
+    let i;
+    let len;
+
+    for (i = 0, len = str.length; i < len; i += n) {
+      ret.push(str.substr(i, n));
+    }
+
+    return ret;
+  }
+
   inverseCanvasScale(): number {
     return 1 / this.canvasScale;
   }
@@ -213,6 +268,7 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
     this.CTX.clearRect(0 - this.panOffsetX, 0 - this.panOffsetY, virtualWidth, virtualWidth);
 
     this.CTX.strokeStyle = BLACK;
+    this.CTX.lineWidth = 2;
     this.ideaService.drawnObjects.forEach(obj => {
       let [lX, lY] = [null, null];
       obj.forEach(coords => {
@@ -227,5 +283,41 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
       });
       this.CTX.stroke();
     });
+
+    this.ideaService.stickies.forEach(sticky => {
+      this.CTX.fillStyle = sticky.colour;
+      this.CTX.fillRect(sticky.x, sticky.y, sticky.width, sticky.height);
+      this.CTX.fillStyle = BLACK;
+      this.CTX.font = '10px Arial';
+      let i = 1;
+      for (const subStr of sticky.text.split('\n')) {
+        this.CTX.fillText(subStr, sticky.x, sticky.y + (10 * i));
+        i += 1;
+      }
+    });
+  }
+
+  stickyCollisionDetection(e): boolean {
+    try {
+      this.ideaService.stickies.forEach(sticky => {
+        const x = (e.offsetX - this.panOffsetX) * this.inverseCanvasScale();
+        const y = (e.offsetY - this.panOffsetY) * this.inverseCanvasScale();
+
+        if (sticky.x < x &&
+          sticky.x + sticky.width > x &&
+          sticky.y < y &&
+          sticky.y + sticky.height > y) {
+          const index = this.ideaService.stickies.indexOf(sticky);
+          if (index > -1) {
+            this.ideaService.stickies.splice(index, 1);
+            this.redrawObjects(true);
+            this.deleting = true;
+            return true;
+          }
+        }
+      });
+    } catch {
+    }
+    return false;
   }
 }
