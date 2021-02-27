@@ -102,6 +102,8 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
       case 1:
         if (!this.deleting) {
           this.createSticky(e);
+          console.log(e.offsetX);
+          console.log(e.offsetY);
         }
         else {
           this.deleting = false;
@@ -131,17 +133,7 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
   }
 
   handleMouseWheel(e): void {
-    const dY = e.wheelDeltaY;
-    const scaleFactor = 0.1;
-    let scale = 1;
-    dY > 0 ? scale += scaleFactor : scale -= scaleFactor;
-
-    const acs = this.canvasScale * scale;
-    if (this.between(acs, MIN_ZOOM, MAX_ZOOM)) {
-      this.canvasScale = acs;
-      this.CTX.scale(scale, scale);
-      this.redrawObjects(true);
-    }
+    this.zoom(e);
   }
 
   draw(e): void {
@@ -195,17 +187,37 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
 
   pan(e): void {
     const left = this.lastPanX < e.offsetX;
+    const right = this.lastPanX > e.offsetX;
     const up = this.lastPanY < e.offsetY;
+    const down = this.lastPanY > e.offsetY;
     const panRate = 2;
     if (this.lastPanX) {
-      left ? this.translate(-panRate, null) : this.translate(panRate, null);
-      up ? this.translate(null, -panRate) : this.translate(null, panRate);
-      left ? this.panPos[0] -= panRate : this.panPos[0] += panRate;
-      up ? this.panPos[1] -= panRate : this.panPos[1] += panRate;
+      left ? this.translate(-panRate, null) : null;
+      right ? this.translate(panRate, null) : null;
+      up ? this.translate(null, -panRate) : null;
+      down ? this.translate(null, panRate) : null;
+      left ? this.panPos[0] -= panRate : null;
+      right ? this.panPos[0] += panRate : null;
+      up ? this.panPos[1] -= panRate : null;
+      up ? this.panPos[1] += panRate : null;
     }
     [this.lastPanX, this.lastPanY] = [e.offsetX, e.offsetY];
 
     this.redrawObjects();
+  }
+
+  zoom(e): void {
+    const dY = e.wheelDeltaY;
+    const scaleFactor = 0.1;
+    let scale = 1;
+    dY > 0 ? scale += scaleFactor : scale -= scaleFactor;
+
+    const acs = this.canvasScale * scale;
+    if (this.between(acs, MIN_ZOOM, MAX_ZOOM)) {
+      this.canvasScale = acs;
+      this.CTX.scale(scale, scale);
+      this.redrawObjects(true);
+    }
   }
 
   stopDrawing(e): void {
@@ -214,7 +226,7 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
     this.panning = false;
     this.lastDrawX = null;  // Ensure we start drawing from where user clicks rather than origin.
     this.lastPanX = null;
-    const shouldDraw = this.drawCoords.length > 15;
+    const shouldDraw = this.drawCoords.length > 10 * this.canvasScale;
     shouldDraw ? this.ideaService.drawnObjects.push(this.drawCoords) : this.redrawObjects(true);
     this.drawCoords = [];
   }
