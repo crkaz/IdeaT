@@ -140,8 +140,8 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
     if (!this.drawing) { return; }
     this.CTX.strokeStyle = this.getColour();
     this.CTX.beginPath();
-    const x = (e.offsetX - this.panOffsetX) * this.inverseCanvasScale();
-    const y = (e.offsetY - this.panOffsetY) * this.inverseCanvasScale();
+    const x = (e.offsetX - (this.panOffsetX)) * this.inverseCanvasScale();
+    const y = (e.offsetY - (this.panOffsetY)) * this.inverseCanvasScale();
     !this.lastDrawX ? [this.lastDrawX, this.lastDrawY] = [x, y] : this.CTX.moveTo(this.lastDrawX, this.lastDrawY);   // Ensure we start drawing from where user clicks rather than origin.
     this.drawCoords.push({ x: this.lastDrawX, y: this.lastDrawY });
     this.CTX.lineWidth = 2;
@@ -242,8 +242,8 @@ export class BusinessCanvasBoardComponent implements AfterViewInit, OnDestroy {
 
   translate(x, y): void {
     this.CTX.translate(x, y);
-    x ? this.panOffsetX += x : null;
-    y ? this.panOffsetY += y : null;
+    x ? this.panOffsetX += x / this.inverseCanvasScale() : null;
+    y ? this.panOffsetY += y / this.inverseCanvasScale() : null;
   }
 
   // util operator
